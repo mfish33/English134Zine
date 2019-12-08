@@ -223,22 +223,22 @@ var main = (function () {
 
     var cmds = {
         NG: { value: "ng", help: configs.getInstance().ng_help },
+        TREE: { value: "tree", help: configs.getInstance().tree_help },
         LS: { value: "ls", help: configs.getInstance().ls_help },
         CAT: { value: "cat", help: configs.getInstance().cat_help },
-        WHOAMI: { value: "whoami", help: configs.getInstance().whoami_help },
-        DATE: { value: "date", help: configs.getInstance().date_help },
-        HELP: { value: "help", help: configs.getInstance().help_help },
-        CLEAR: { value: "clear", help: configs.getInstance().clear_help },
-        REBOOT: { value: "reboot", help: configs.getInstance().reboot_help },
         CD: { value: "cd", help: configs.getInstance().cd_help },
         RM: { value: "rm", help: configs.getInstance().rm_help },
         RMDIR: { value: "rmdir", help: configs.getInstance().rmdir_help },
         TOUCH: { value: "touch", help: configs.getInstance().touch_help },
         SUDO: { value: "sudo", help: configs.getInstance().sudo_help },
         MKDIR: { value: "mkdir", help: configs.getInstance().mkdir_help },
-        TREE: { value: "tree", help: configs.getInstance().tree_help },
-        SETFILE: { value: "setFile", help: configs.getInstance().ng_help },
-        NODE: { value: "node", help: configs.getInstance().ng_help }
+        SETFILE: { value: "setFile", help: configs.getInstance().setFile_help },
+        NODE: { value: "node", help: configs.getInstance().node_help },
+        WHOAMI: { value: "whoami", help: configs.getInstance().whoami_help },
+        DATE: { value: "date", help: configs.getInstance().date_help },
+        HELP: { value: "help", help: configs.getInstance().help_help },
+        CLEAR: { value: "clear", help: configs.getInstance().clear_help },
+        REBOOT: { value: "reboot", help: configs.getInstance().reboot_help }
     };
 
 
