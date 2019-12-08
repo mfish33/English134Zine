@@ -40,13 +40,56 @@ export default {
             Even after taking a lot of time to learn about drones on the internet, I still failed. I mean I failed really hard. One time, I had my drone fall from 300 feet when trying to show it to a few friends. Another time, the arm of the drone caught fire because I incorrectly wired a motor controller. There was one time when my drone lost connection over the ocean and I lost it with a brand new GoPro. But these failures never stopped me. I had already learned from Nerf guns, failure is just a learning opportunity that can make you grow. Funnily enough, I see this same attitude about failure from my father.  When he accidentally breaks something and is cursing because he is going to have to bring it into the shop, it never stops him from picking up the tools the next time. In reality, I don't think engineering would be fun without failure. It allows you to keep working and learning just like I did buying and accidently breaking Nerf guns far past the wars being over.`
         },
         projects:{
-            'Cal-Poly-Human-Powered-Vehicle-Vision-System.txt':'',
-            'Designing-a-Flight-Controller.txt':''
+            'Cal-Poly-Human-Powered-Vehicle-Vision-System.txt':`When I got to Cal poly I decided to join an engineering club. After viewing many of them, I settled on Human Powered Vehicle, HPV for short. I know the acronym is unfortunate. HPV build's a bike each year to try to achieve the fastest possible speed. Last year our team was able to achieve 66mph setting the american collegiate record. The current world  record is 85mph. Below is a video showing off the record holder's bike.
+            As you can see in the video, the bike does not have a windshield, instead the driver uses camera's to steer the bike. This is because installing  windows would greatly increases drag. Because of my past experience with drone racing, I was interested in working on the bike's vision system. Because the team had nobody else working on it they assigned me as the design lead. Last year the Cal Poly team attempted to do a vision system but because of oversights made in the design, the system was scraped two weeks before competition and windows were added.     
+            The main changes I purposed to the team was changing the vision cameras from common car backup cameras to ones made for drone racing. This is because the ones made for drone racing use much higher quality components ,that improve camera quality and latency. Further, I purposed a On Screen Display(OSD) to communicate important information to the rider such as power output, speed and bike tilt. Lastly, I suggested that we make our own battery casings to allow us to hot swap batteries out of the electrical system.        
+            First up the batteries:       
+            The battery consists of two components, the circuit board and the case. 
+            First lets examine the circuit board
+            The circuit board has 3 components, a keystone 18650 dual battery holder, a xt30 connector for power, and a JST-XH 3pin connector for balance charging. This leaves us with a 7.2V, 2,600 mah battery, that can power the vision system for over two hours.
+            Next up is the casing
+            There is nothing that special about it except that it has rails on the sides of the battery that slide into the electrical system, to be shown next.            
+            The electrical system:
+            As you can see the batteries slot into the top of the system and the power connections are automatically mated. By splinting up the casing into a 3 parts it makes the 3D printing process much more simple and allows for the use of less supports while printing. 
+            The real magic of the electrical system though is the custom circuit board
+            This board interfaces with two off the shelf drone flight controllers and a Raspberry Pi Zero. This is because drone flight controllers are the cheapest and simplest way to do a custom OSD. Another nice plus about using the drone flight controllers is that the code base for them is opensource meaning that modifying them for this task will be extremely easy. The raspberry pi is there, to communicate with the power pedals which gives us information on the riders output power. 
+            The drone flight controller, we are using is the HYPERLITE F4:
+            The final part of the Vision system is the aerodynamic Stalk where the cameras are mounted.           
+            The stalk consists of two pieces the camera pod and the mast. The camera pod is the top part that holds the cameras and the mast is the airfoil that raises the cameras away from the bike to give a better view.
+            The camera pod was made from a spline that was formed around the cameras. While this gave a very compact flowing shape it will eventually be formed to an airfoil to improve aerodynamics. The camera pod will also be printed from TPU in order allow the cameras to be squeezed in their small spot without breaking the print. The other upside about using TPU is that some of the vibrations from the road will be soaked up by the material before getting to the cameras.
+            This picture is just a wire frame of the mast and shows how wires will be routed through it. The current plan is to print the mast in Nylon in order to have increased rigidity while still maintaining great impact strength, in case of a bike tip over.
+            TO BE CONTINUED AS DESIGN IS UPDATED`,
+            'Designing-a-Flight-Controller.txt':`Designing a Flight Controller
+            Ever since I started drone racing I have been interested in how flight controllers(FC) work and I thought it would be a cool project to do so. I actually made an attempt a two years ago but I found it too daugnting to make a schematic. I could only find a schematic for an extremely dated naze 32 FC that was not worth the time investment it would take to create. A year went by and I was thinking about the project again. Somehow by divine intervention a You-tuber I am subscribed, Done Mesh, released a video about his open source flight controller. This allowed me to take a complete schematic and go about designing a Printed Circuit Board(PCB) for it. 
+            My first attempt was actually very good. Especially because I had no prior PCB design experience. I really jumped in the deep end with this project. Not only is the circuit complicated, I made it even harder making it half the size of a normal FC. Because of this I had to turn my design into a 4-layer design witch introduces even more complications. After over 20 hours of design and revisions I decided to order the PCB.
+            BACK UP A SECOND ...
+            While I was designing this PCB, I was practicing my soldering skills. While at this time I had been soldering for several years, the skills required to assemble the board were well passed what I was able to do. Luckily for me I already owned the right tools. I owned a hot air station and a decent soldering iron. From there I bought some soldering practicing kits from Bangood. The kits had blank circuit boards and some cheap components to practice with. I was mostly practiced soldering the microprocessors in the kit because they had the most amount of pins and if there is a short on any of them they  wont work. After watching many videos and attempting it over and over I finally was able to solder one successfully. After this success I tried repairing one of these processors on one of the broken FCs I had sitting around. I swamped the burned processor out and replaced it with a new one. It worked and I felt ready to build my own FC.
+            V1 FLIGHT CONTROLLER       
+            After 4 hours of soldering, I couldn't believe I was actually holding my flight controller. 
+            There was some problems though.     
+            - The USB footprint was not correct (led to USB port falling off) 
+            - 3.3v regulator was not fully connected (red wire fixes that)
+            - 5v regulator did not work (too small traces)
+            - On Screen Display did not work (wrong component footprint on board) 
+            Despite these issues the FC did work and I was able to put it on a drone and fly it. The FC flew pretty good and in a blind test, I would not be able to tell it apart from the professionally developed ones in raw flight performance.    
+            FLIGHT CONTROLLER V2
+            I wanted to address the above issues to have a fully working professional looking FC. So I went back to the computer to fix the above issues and clean up many of the weird connections. One of the ways I did this is by changing the power planes to have one for 3.3V and one for 5V instead of two for 5V. I also made better use of the inner layers to allow better coverage of the power and ground planes.           
+            Unfortunately, I do not have any pictures of the actual board. After another 4 hour assembly session I went to power it on and it smoked. After closer inspection I realized that the power planes were shorted. This was because I forgot to regenerate the copper fills before I sent the PCB to get made. This left the boards I ordered completely useless.
+            At this point I was getting busy with my summer job and I had little time left for this project so it fell by the wayside. Now in college I would like to revisit this project at some point. When I do I'll be sure to update this page.`
         }
     },
-    'images':{'image1.jpeg':'','image2.jpg':''},
+    'images':{
+        carousel:{
+            'dronepic.jpeg':'',
+            'goproMonunt.png':'',
+            'circuitBoard.jpeg':''
+        },
+        'post1.jpeg':'',
+        'post2.jpeg':'',
+        'post3.jpeg':'',
+        'post2.jpeg':''
+    },
     'invertColors.js':`
-        console.log('test');
         document.body.style.color = document.body.style.color == 'black' ? 'white' : 'black';
         document.body.style['background-color'] = document.body.style['background-color'] == 'white' ? 'black' : 'white';
     `,

@@ -48,6 +48,16 @@ class FileSystem{
         return this
     }
 
+    rmdir(dir) {
+        if(this.path.length)
+        {
+            delete this._traverse()[dir]
+        }else {
+            delete this.fileSystem[dir]
+        }
+        return this
+    }
+
     newFile(file) {
         if(this.path.length) {
             this._traverse()[file] = null   
@@ -79,7 +89,7 @@ class FileSystem{
     
 }
 
-let fs = new FileSystem(defaultFileSystem)
+let fs = new FileSystem(JSON.parse(JSON.stringify(defaultFileSystem)))
 
 
 var main = (function () {
@@ -106,7 +116,7 @@ var main = (function () {
             cd_help: "Change the current working directory.",
             mv_help: "Move (rename) files.",
             rm_help: "Remove files or directories.",
-            rmdir_help: "Remove directory, this command will only work if the folders are empty.",
+            rmdir_help: "Remove directory",
             touch_help: "Change file timestamps. If the file doesn't exist, it's created an empty one.",
             sudo_help: "Execute a command as the superuser.",
             mkdir_help: "Make a directory.",
@@ -221,7 +231,6 @@ var main = (function () {
         CLEAR: { value: "clear", help: configs.getInstance().clear_help },
         REBOOT: { value: "reboot", help: configs.getInstance().reboot_help },
         CD: { value: "cd", help: configs.getInstance().cd_help },
-        MV: { value: "mv", help: configs.getInstance().mv_help },
         RM: { value: "rm", help: configs.getInstance().rm_help },
         RMDIR: { value: "rmdir", help: configs.getInstance().rmdir_help },
         TOUCH: { value: "touch", help: configs.getInstance().touch_help },
@@ -428,9 +437,12 @@ var main = (function () {
             case cmds.CD.value:
                 this.CD(cmdComponents);
                 break;
-            case cmds.MV.value:
             case cmds.RMDIR.value:
+                    this.rmdir(cmdComponents);
+                    break;
             case cmds.RM.value:
+                this.rm(cmdComponents);
+                break;
             case cmds.TOUCH.value:
                 this.touch(cmdComponents);
                 break;
@@ -513,6 +525,26 @@ var main = (function () {
         let dir = cmdComponents[1] //zero is the comand issued
         fs.mkdir(dir)
         this.type('', this.unlock.bind(this));
+    };
+
+    Terminal.prototype.rmdir = function (cmdComponents) {
+        let dir = cmdComponents[1] //zero is the comand issued
+        if(fs.currentDIR()[dir] && typeof fs.currentDIR()[dir] != 'string') {
+            fs.rmdir(dir)
+            this.type('', this.unlock.bind(this));
+        } else {
+            this.type('The system cannot find the path specified.', this.unlock.bind(this));
+        }   
+    };
+
+    Terminal.prototype.rm = function (cmdComponents) {
+        let dir = cmdComponents[1] //zero is the comand issued
+        if(typeof fs.currentDIR()[dir] == 'string') {
+            fs.rmdir(dir)
+            this.type('', this.unlock.bind(this));
+        } else {
+            this.type('The system cannot find the file specified.', this.unlock.bind(this));
+        }   
     };
 
     Terminal.prototype.tree = function () {      
@@ -604,6 +636,7 @@ var main = (function () {
     };
 
     Terminal.prototype.reboot = function () {
+        fs = new FileSystem(JSON.parse(JSON.stringify(defaultFileSystem)))
         this.type(configs.getInstance().reboot_message, this.reset.bind(this));
     };
 
