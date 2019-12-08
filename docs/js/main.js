@@ -1,10 +1,7 @@
 "use strict";
 let ngBuilt = false
-let cookies = document.cookie.split(';')
 import defaultFileSystem from './defaultfs.js'
-if(cookies.includes('terminalOver=true')) {
- //   window.location.replace("http://www.w3schools.com")
-}
+
 
 class FileSystem{
 
