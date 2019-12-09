@@ -18,7 +18,7 @@ You can preview a live demo [here](https://mfish33.github.io/English134Zine/play
 
 ### Mobile
 
-![Screenshot of the application running on a mobile device](https://raw.githubusercontent.com/luisbraganca/fake-terminal-website/master/screenshots/mobile.png)
+![Screenshot of the application running on a mobile device](terminalScreenShotMobile.PNG)
 
 # From Bragança Github
 
