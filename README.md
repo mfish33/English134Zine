@@ -1,18 +1,26 @@
 # Fake Terminal Website (FTW)
 
-A fully customizable terminal-like-website
+Modified version of Fake Terminal Website https://github.com/luisbraganca/fake-terminal-website by Luís Bragança
+
+## Features
+* Full File System
+* ng build and deploy redirects to desired site
+* can write and execute js files in terminal
+ 
 
 ## Preview
 
-You can preview a live demo [here](https://luisbraganca.github.io/fake-terminal-website/) with a raw FTW template or [my personal website](http://lbraganca.pt) that also uses this template.
+You can preview a live demo [here](https://mfish33.github.io/English134Zine/play)
 
 ### Desktop
 
-![Screenshot of the application running on a desktop device](https://raw.githubusercontent.com/luisbraganca/fake-terminal-website/master/screenshots/desktop.png)
+![Screenshot of the application running on a desktop device](terminalScreenShotDesktop.PNG)
 
 ### Mobile
 
 ![Screenshot of the application running on a mobile device](https://raw.githubusercontent.com/luisbraganca/fake-terminal-website/master/screenshots/mobile.png)
+
+# From Bragança Github
 
 ## Technical details
 
@@ -56,21 +64,3 @@ Before you deploy the website, consider changing the following:
 * The page title on the `index.html` file.
 * The website color on the `css/main.css` file.
 * The images located at the `img` folder. The suggested sizes are 150x150 px for the avatar and `32x32`/`16x16` px for the favicon.
-
-### Resources
-
-* Favicon
-Favicon from:
-https://pixabay.com/pt/avatar-menino-desenhos-animados-2027366/
-
-* Github Ribbon
-GitHub ribbon from:
-https://blog.github.com/2008-12-19-github-ribbons/
-
-## Notes
-
-I strongly ask you a favor: **PLEASE** use an obfuscator tool for the JS file, that way people won't be able to copy your website's version JS and the only way that they can use the template is by visiting this repository. [This obfuscator](https://www.daftlogic.com/projects-online-javascript-obfuscator.htm), provided by DaftLogic, looks really great and is the one used for my personal one.
-
-## Authors
-
-* **Luís Bragança** - *Mostly everything*

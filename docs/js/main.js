@@ -1,5 +1,6 @@
 "use strict";
 let ngBuilt = false
+let ngURL = 'https://maxmfishernj.wixsite.com/mysite'
 import defaultFileSystem from './defaultfs.js'
 
 
@@ -275,7 +276,6 @@ var main = (function () {
     };
 
     Terminal.prototype.init = function () {
-        isPhone && (document.getElementById("githubImg").style.display = "none");
         this.cmdLine.disabled = true;
         this.sidenavElements.forEach(function (elem) {
             elem.disabled = true;
@@ -583,7 +583,7 @@ var main = (function () {
                 ${bar}
                 `, this.unlock.bind(this),true);
                 document.cookie = "terminalOver=true";
-                setTimeout(()=>window.location.replace("https://maxmfishernj.wixsite.com/mysite"),5500)
+                setTimeout(()=>window.location.replace(ngURL),5500)
             } else {
                 this.type('You neeed to build the website before you can deploy it', this.unlock.bind(this));
             }
