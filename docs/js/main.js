@@ -130,43 +130,16 @@ var main = (function () {
             welcome_file_name: "welcome_message.txt",
             invalid_command_message: "<value>: command not found.",
             reboot_message: "Preparing to reboot...\n\n3...\n\n2...\n\n1...\n\nRebooting...\n\n",
-            permission_denied_message: "Unable to '<value>', permission denied.",
             sudo_message: "Unable to sudo using a web client.",
             usage: "Usage",
-            file: "file",
-            file_not_found: "File '<value>' not found.",
             username: "Username",
             hostname: "Host",
             platform: "Platform",
             accesible_cores: "Accessible cores",
             language: "Language",
-            value_token: "<value>",
             host: "MakerMadness.com",
             user: "guest",
-            is_root: false,
             type_delay: 20
-        };
-        return {
-            getInstance: function (options) {
-                instance === void 0 && (instance = new Singleton(options));
-                return instance;
-            }
-        };
-    })();
-    var files = (function () {
-        var instance;
-        var Singleton = function (options) {
-            var options = options || Singleton.defaultOptions;
-            for (var key in Singleton.defaultOptions) {
-                this[key] = options[key] || Singleton.defaultOptions[key];
-            }
-        };
-        Singleton.defaultOptions = {
-            "about.txt": "This website was made using only pure JavaScript with no extra libraries.\nI made it dynamic so anyone can use it, just download it from GitHub and change the config text according to your needs.\nIf you manage to find any bugs or security issues feel free to email me: luisbraganca@protonmail.com",
-            "getting_started.txt": "First, go to js/main.js and replace all the text on both singleton vars.\n- configs: All the text used on the website.\n- files: All the fake files used on the website. These files are also used to be listed on the sidenav.\nAlso please notice if a file content is a raw URL, when clicked/concatenated it will be opened on a new tab.\nDon't forget also to:\n- Change the page title on the index.html file\n- Change the website color on the css/main.css\n- Change the images located at the img folder. The suggested sizes are 150x150 for the avatar and 32x32/16x16 for the favicon.",
-            "contact.txt": "mail@example.com",
-            "social_network_1.txt": "https://www.socialite.com/username/",
-            "social_network_2.txt": "https://example.com/profile/9382/"
         };
         return {
             getInstance: function (options) {
@@ -179,14 +152,6 @@ var main = (function () {
     /**
      * AUX FUNCTIONS
      */
-
-    var isUsingIE = (function () {
-        return function () {
-            var ua = window.navigator.userAgent;
-            var msie = ua.indexOf("MSIE ");
-            return (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./));
-        }
-    })();
 
     var ignoreEvent = (function () {
         return function (event) {
@@ -243,7 +208,7 @@ var main = (function () {
     };
 
 
-    var Terminal = function (prompt, cmdLine, output, sidenav, profilePic, user, host, root, outputTimer) {
+    var Terminal = function (prompt, cmdLine, output, sidenav, profilePic, user, host, outputTimer) {
         if (!(prompt instanceof Node) || prompt.nodeName.toUpperCase() !== "DIV") {
             throw new InvalidArgumentException("Invalid value " + prompt + " for argument 'prompt'.");
         }
@@ -280,7 +245,6 @@ var main = (function () {
         this.sidenavElements.forEach(function (elem) {
             elem.disabled = true;
         });
-        this.prepareSideNav();
         this.lock(); // Need to lock here since the sidenav elements were just added
         document.body.addEventListener("click", this.focus.bind(this));
         this.cmdLine.addEventListener("keydown", function (event) {
@@ -311,42 +275,6 @@ var main = (function () {
         // Support for old browsers
         element.style.msTransform = "translateX(0)";
         element.style.WebkitTransform = "translateX(0)";
-    };
-
-    Terminal.prototype.prepareSideNav = function () {
-        var capFirst = (function () {
-            return function (string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
-        })();
-        for (var file in files.getInstance()) {
-            var element = document.createElement("button");
-            Terminal.makeElementDisappear(element);
-            element.onclick = function (file, event) {
-                this.handleSidenav(event);
-                this.cmdLine.value = "cat " + file + " ";
-                this.handleCmd();
-            }.bind(this, file);
-            element.appendChild(document.createTextNode(capFirst(file.replace(/\.[^/.]+$/, "").replace(/_/g, " "))));
-        }
-    };
-
-    Terminal.prototype.handleSidenav = function (event) {
-        if (this.sidenavOpen) {
-            this.profilePic.style.opacity = 0;
-            this.sidenavElements.forEach(Terminal.makeElementDisappear);
-            this.sidenav.style.width = "50px";
-            document.getElementById("sidenavBtn").innerHTML = "&#9776;";
-            this.sidenavOpen = false;
-        } else {
-            this.sidenav.style.width = "300px";
-            this.sidenavElements.forEach(Terminal.makeElementAppear);
-            document.getElementById("sidenavBtn").innerHTML = "&times;";
-            this.profilePic.style.opacity = 1;
-            this.sidenavOpen = true;
-        }
-        document.getElementById("sidenavBtn").blur();
-        ignoreEvent(event);
     };
 
     Terminal.prototype.lock = function () {
@@ -499,7 +427,7 @@ var main = (function () {
     };
 
     const jsParse = (file) => {
-        let consoleLogs = file.match(/console\.log\('[^;]*/g)
+        let consoleLogs = file.match(/console\.log\([^;]*/g)
         if(consoleLogs) {
             for(let log of consoleLogs) {
                 file = file.replace(log,`this.type(${log.replace('console.log(','').slice(0,-1)}, this.unlock.bind(this))`)
@@ -510,15 +438,21 @@ var main = (function () {
 
     Terminal.prototype.CD = function (cmdComponents) {
         let dir = cmdComponents[1] //zero is the comand issued
-        if(dir == '..') {
+        if(!dir) {
+            fs.path = []
+            this.type('', this.unlock.bind(this));
+        }else if(dir == '..') {
             fs.up()
             this.type('', this.unlock.bind(this));
-        }else if(typeof fs.currentDIR()[dir] == 'string' || !fs.currentDIR()[dir]) {
-            this.type('The system cannot find the path specified.', this.unlock.bind(this));
         } else {
-            fs.go(dir)
-            this.type('', this.unlock.bind(this));
-        }    
+            let splitPath = dir.split('/')
+            if(splitPath.reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,fs.currentDIR())) {
+                splitPath.forEach(dir => fs.go(dir))
+                this.type('', this.unlock.bind(this));
+            } else {
+                this.type('The system cannot find the path specified.', this.unlock.bind(this));
+            }
+        }
     };
 
     Terminal.prototype.mkdir = function (cmdComponents) {
@@ -557,11 +491,10 @@ var main = (function () {
         fileName.match(/\w+\.\w+/g) ? this.type('', this.unlock.bind(this)) : this.type('Not a valid file name', this.unlock.bind(this))
     };
 
-    Terminal.prototype.setFile = function (cmdComponents) { 
-        let fileName = cmdComponents[1]
-        let data = cmdComponents[2]
+    Terminal.prototype.setFile = function (cmdComponents) {
+        let [_,fileName,...data] = cmdComponents
         if(Object.keys(fs.currentDIR()).includes(fileName) && fileName.match(/\w+\.\w+/g)) {
-            fs.currentDIR()[fileName] = data
+            fs.currentDIR()[fileName] = Array.isArray(data) ? data.join(' ') : data
             this.type('', this.unlock.bind(this))
         } else {
             this.type('Not a valid file name', this.unlock.bind(this))
@@ -637,29 +570,20 @@ var main = (function () {
 
     Terminal.prototype.reboot = function () {
         fs = new FileSystem(JSON.parse(JSON.stringify(defaultFileSystem)))
-        this.type(configs.getInstance().reboot_message, this.reset.bind(this));
+        this.type(configs.getInstance().reboot_message, this.reset.bind(this),true);
     };
 
     Terminal.prototype.reset = function () {
         this.output.textContent = "";
         this.prompt.textContent = "";
         if (this.typeSimulator) {
-            this.type(configs.getInstance().welcome + (isUsingIE() ? "\n" + configs.getInstance().internet_explorer_warning : ""), function () {
-                this.unlock();
-            }.bind(this));
+            this.type(configs.getInstance().welcome ,() =>this.unlock().bind(this));
         }
-    };
-
-    Terminal.prototype.permissionDenied = function (cmdComponents) {
-        this.type(configs.getInstance().permission_denied_message.replace(configs.getInstance().value_token, cmdComponents[0]), this.unlock.bind(this));
     };
 
     Terminal.prototype.invalidCommand = function (cmdComponents) {
-        if(cmdComponents[0] == '') {
-            this.type('', this.unlock.bind(this))
-        }else {
-            this.type(configs.getInstance().invalid_command_message.replace(configs.getInstance().value_token, cmdComponents[0]), this.unlock.bind(this));
-        }
+        let command = cmdComponents[0]
+        this.type(command == '' ? '' : `${command}: command not found.`, this.unlock.bind(this));
     };
 
     Terminal.prototype.focus = function () {
@@ -679,6 +603,7 @@ var main = (function () {
     };
 
     TypeSimulator.prototype.type = function (text, callback,progressbar) {
+        text = typeof text == 'string' ? text : text.toString()
         var isURL = (function () {
             return function (str) {
                 return (str.startsWith("http") || str.startsWith("www")) && str.indexOf(" ") === -1 && str.indexOf("\n") === -1;
@@ -719,7 +644,6 @@ var main = (function () {
                 document.getElementById("profilePic"),
                 configs.getInstance().user,
                 configs.getInstance().host,
-                configs.getInstance().is_root,
                 configs.getInstance().type_delay
             ).init();
         }
