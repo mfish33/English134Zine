@@ -80,7 +80,7 @@ export default {
     },
     'images':{
         carousel:{
-            'dronepic.jpeg':'',
+            'dronepic.jpeg':'www.google.com',
             'goproMonunt.png':'',
             'circuitBoard.jpeg':''
         },
