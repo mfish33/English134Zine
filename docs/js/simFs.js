@@ -9,7 +9,7 @@ export default class FileSystem{
         return this.path.join('/')
     }
 
-    go(dir) {
+    _go(dir) {
         this.path.push(dir)
         if(this._traverse()==null) {
             return null
@@ -53,13 +53,17 @@ export default class FileSystem{
         return this
     }
 
-    newFile(file) {
-        if(this.path.length) {
-            this._traverse()[file] = null   
-        }else {
-            this.fileSystem[file] = null
+    newFile(filePath) {
+        let path = filePath.split('/')
+        let fileName = path.pop()
+        let questionPath = path.reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,this.currentDIR())
+        if(questionPath[fileName]) {
+            return true
+        } else if(questionPath) {
+            questionPath[fileName] = ''
+            return true
         }
-        return this
+        return false
     }
 
     getTree(obj = this.currentDIR(),level = 0) {
@@ -75,11 +79,35 @@ export default class FileSystem{
         },'')
     }
 
-    _traverse(obj = this.fileSystem,count = this.path.length) {
-        if(this.path.length && count == 0) {
-            return obj
+    _traverse() {
+        return this.path.reduce((acc,curr) => acc[curr],this.fileSystem)
+    }
+
+
+    go(path) {
+        let oldPath = [...this.path]
+        let questionPath = path.split('/').reduce((acc,curr) => acc && acc.currentDIR()[curr] ? acc._go(curr) : null,this)
+        if(!questionPath) {
+            this.path = oldPath
+            return false
         }
-        return this._traverse(obj[this.path[this.path.length - count]],count-1)
+        return true
+    }
+
+    retrieveFile(path) {
+        let questionFile = path.split('/').reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,this.currentDIR())
+        return typeof questionFile == 'string' ? questionFile : null
+    }
+
+    setFile(path,data) {
+        let pathSplit = path.split('/')
+        let fileName = pathSplit.pop()
+        let questionDir = pathSplit.reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,this.currentDIR())
+        if(typeof questionDir[fileName] == 'string') {
+            questionDir[fileName] = data
+            return true
+        }
+        return false
     }
     
 }

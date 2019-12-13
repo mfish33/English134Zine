@@ -11,9 +11,11 @@ export default class TypeSimulator {
 
     type(text, callback) {
         text = typeof text == 'string' ? text : text.toString()
-        var output = this.output;
-        output.innerHTML += (text.replace(/\n/g, "<br/>")) + "<br/>";
+        if(text) {
+            this.output.innerHTML += (text.replace(/\n/g, "<br/>")) + "<br/>";
+        }
         callback(); 
+        
     }
 
     typeScroll(text,callback) {     

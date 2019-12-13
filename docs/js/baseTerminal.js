@@ -16,11 +16,11 @@ export default class BaseTerminal {
         return `${this.config.user}@${this.config.host}:~${this.fs.cwd}$`   
     }
 
-    _type(text, callback) {
+    _type(text, callback = this._unlock.bind(this)) {
         this.typeSimulator.type(text, callback);
     };
 
-    _typeScroll(text, callback) {
+    _typeScroll(text, callback = this._unlock.bind(this)) {
         this.typeSimulator.typeScroll(text, callback)
     }
 
@@ -33,7 +33,6 @@ export default class BaseTerminal {
 
     _init() {
         this.cmdLine.disabled = true;
-        this._lock(); // Need to lock here since the sidenav elements were just added
         document.body.addEventListener("click", this._focus.bind(this));
         this.cmdLine.addEventListener("keydown", function (event) {
             if (event.which === 13 || event.keyCode === 13) {
@@ -106,7 +105,7 @@ export default class BaseTerminal {
 
     _invalidCommand(cmdComponents) {
             let [command] = cmdComponents
-            this._type(command == '' ? '' : `${command}: command not found.`, this._unlock.bind(this));
+            command == '' ? this._unlock() : this._type(`${command}: command not found.`)
     }   
 
     //DEFAULT COMMANDS
@@ -146,4 +145,5 @@ export default class BaseTerminal {
             help: 'Reboot the system.'
         }
     };
+
 }
