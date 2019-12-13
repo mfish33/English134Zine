@@ -26,6 +26,7 @@ class Terminal extends BaseTerminal{
             command: (cmdComponents) => {
                 let [,filePath] = cmdComponents
                 let file = this.fs.retrieveFile(filePath)
+                file = file == '' ? '\n' : file
                 file ? this._type(file) : this._type('Not a valid file name');
                 
             },

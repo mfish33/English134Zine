@@ -95,7 +95,7 @@ export default class FileSystem{
     }
 
     retrieveFile(path) {
-        let questionFile = path.split('/').reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,this.currentDIR())
+        let questionFile = path.split('/').reduce((acc,curr) => acc && (acc[curr] || acc[curr] == '') ? acc[curr] : null,this.currentDIR())
         return typeof questionFile == 'string' ? questionFile : null
     }
 
