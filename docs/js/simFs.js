@@ -43,14 +43,17 @@ export default class FileSystem{
         return this
     }
 
-    rmdir(dir) {
-        if(this.path.length)
-        {
-            delete this._traverse()[dir]
-        }else {
-            delete this.fileSystem[dir]
-        }
-        return this
+    rmdir(path,file = false) {
+        let possiblePath = path.split('/')
+        let dest = possiblePath.pop()
+        possiblePath = possiblePath.reduce((acc,curr) => acc && acc[curr] ? acc[curr] : null,this.currentDIR())
+        if(possiblePath) {
+            if((file && typeof possiblePath[dest] == 'string') || (!file && typeof possiblePath[dest] == 'object')){
+                delete possiblePath[dest]
+                return true
+            }
+        } 
+        return false
     }
 
     newFile(filePath) {

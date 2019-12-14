@@ -1,9 +1,7 @@
 export default class TypeSimulator {
-    constructor(timer, output,document) {
-        this.document = document
-        var timer = parseInt(timer);
+    constructor(timer, output) {
         if (timer === Number.NaN || timer < 0) {
-            throw new Error("Invalid value " + timer + " for argument 'timer'.");
+            throw new Error(`Invalid value ${timer} for timer config'.`);
         }
         this.timer = timer;
         this.output = output;
