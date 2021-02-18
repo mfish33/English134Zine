@@ -10,7 +10,7 @@ Modified version of Fake Terminal Website https://github.com/luisbraganca/fake-t
 
 ## Preview
 
-You can preview a live demo [here](https://mfish33.github.io/English134Zine/play)
+You can preview a live demo [here](https://mfish33.github.io/Fake-Terminal/play)
 
 ### Desktop
 
