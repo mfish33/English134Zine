@@ -1,0 +1,33 @@
+name: Deployment
+
+on: push
+
+jobs:
+  CI_CD:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      # Getting branch
+      # https://stackoverflow.com/questions/58033366/how-to-get-the-current-branch-within-github-actions
+      - name: Extract branch name
+        run: branch=${GITHUB_REF#refs/heads/} >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: 9df4beb244be2085481b16db7f439a75
+          projectName: fake-terminal
+          directory: docs
+          branch: ${{ steps.extract_branch.outputs.branch }}
